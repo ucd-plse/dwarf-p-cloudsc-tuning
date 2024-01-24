@@ -129,16 +129,12 @@ set(ECBUILD_Fortran_FLAGS "${ECBUILD_Fortran_FLAGS} -traceback")
 set(ECBUILD_Fortran_FLAGS "${ECBUILD_Fortran_FLAGS} -align array64byte")
 set(ECBUILD_Fortran_FLAGS "${ECBUILD_Fortran_FLAGS} -warn nounused,nouncalled")
 set(ECBUILD_Fortran_FLAGS "${ECBUILD_Fortran_FLAGS} -march=core-avx2")
-set(ECBUILD_Fortran_FLAGS "${ECBUILD_Fortran_FLAGS} -finline-functions")
-set(ECBUILD_Fortran_FLAGS "${ECBUILD_Fortran_FLAGS} -finline-limit=1500")
-set(ECBUILD_Fortran_FLAGS "${ECBUILD_Fortran_FLAGS} -Winline")
 set(ECBUILD_Fortran_FLAGS "${ECBUILD_Fortran_FLAGS} -no-fma")
 set(ECBUILD_Fortran_FLAGS "${ECBUILD_Fortran_FLAGS} -assume realloc_lhs")
 set(ECBUILD_Fortran_FLAGS "${ECBUILD_Fortran_FLAGS} -fp-model precise")
 set(ECBUILD_Fortran_FLAGS "${ECBUILD_Fortran_FLAGS} -ftz")
 set(ECBUILD_Fortran_FLAGS "${ECBUILD_Fortran_FLAGS} -fp-speculation=safe")
 set(ECBUILD_Fortran_FLAGS "${ECBUILD_Fortran_FLAGS} -fast-transcendentals")
-set(ECBUILD_Fortran_FLAGS "${ECBUILD_Fortran_FLAGS} -r8")
 
 ####################################################################
 # LINK FLAGS
@@ -148,3 +144,14 @@ set( ECBUILD_SHARED_LINKER_FLAGS "-Wl,--eh-frame-hdr -Ktrap=fp" )
 set( ECBUILD_MODULE_LINKER_FLAGS "-Wl,--eh-frame-hdr -Ktrap=fp -Wl,-Map,loadmap" )
 set( ECBUILD_EXE_LINKER_FLAGS    "-Wl,--eh-frame-hdr -Ktrap=fp -Wl,-Map,loadmap -Wl,--as-needed" )
 set( ECBUILD_CXX_IMPLICIT_LINK_LIBRARIES "${LIBCRAY_CXX_RTS}" CACHE STRING "" )
+
+####################################################################
+# GPTL FLAGS
+####################################################################
+set(ECBUILD_Fortran_FLAGS "${ECBUILD_Fortran_FLAGS} -finstrument-functions")
+set(ECBUILD_Fortran_FLAGS "${ECBUILD_Fortran_FLAGS} -O1")
+set(ECBUILD_Fortran_FLAGS "${ECBUILD_Fortran_FLAGS} -I /glade/u/home/jdvanover/gptl-8.1.1/install-intel-w-omp/include -DGPTL")
+set( ECBUILD_SHARED_LINKER_FLAGS "-L/glade/u/home/jdvanover/gptl-8.1.1/install-intel-w-omp/lib -lgptl -lgptlf -rdynamic" )
+set( ECBUILD_MODULE_LINKER_FLAGS "-L/glade/u/home/jdvanover/gptl-8.1.1/install-intel-w-omp/lib -lgptl -lgptlf -rdynamic" )
+set( ECBUILD_EXE_LINKER_FLAGS "-L/glade/u/home/jdvanover/gptl-8.1.1/install-intel-w-omp/lib -lgptl -lgptlf -rdynamic" )
+set( ECBUILD_CXX_IMPLICIT_LINK_LIBRARIES "-L/glade/u/home/jdvanover/gptl-8.1.1/install-intel-w-omp/lib -lgptl -lgptlf -rdynamic" )

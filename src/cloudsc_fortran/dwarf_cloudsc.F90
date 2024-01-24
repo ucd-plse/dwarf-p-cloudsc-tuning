@@ -34,6 +34,17 @@ TYPE(CLOUDSC_GLOBAL_STATE) :: GLOBAL_STATE
 INTEGER(KIND=JPIB) :: ENERGY, POWER
 CHARACTER(LEN=1)   :: CLEC_PMON
 
+#ifdef GPTL
+  include 'gptl.inc'
+  integer :: gptl_ret, gptl_i
+  gptl_ret = gptlsetoption(gptlabort_on_error, 1)                  ! Abort on GPTL error
+  gptl_ret = gptlsetoption(gptloverhead, 0)                        ! Turn off overhead estimate
+  gptl_ret = gptlsetutr(gptlnanotime)                              ! Set underlying timer
+  gptl_ret = gptlsetoption(gptlprint_method, gptlfull_tree)        ! Print full tree
+  gptl_ret = gptlsetoption (gptlsync_mpi, 1)                       ! separates true MPI time from time spent waiting
+  gptl_ret = gptlinitialize()                                      ! Initialize GPTL
+#endif
+
 
 CALL GET_ENVIRONMENT_VARIABLE('EC_PMON', CLEC_PMON)
 IF (CLEC_PMON == '1') THEN
@@ -100,5 +111,12 @@ CALL GLOBAL_STATE%VALIDATE(NPROMA, NGPTOT, NGPTOTG)
 
 ! Tear down MPI environment
 CALL CLOUDSC_MPI_END()
+
+#ifdef GPTL
+  do gptl_i=0,0
+        gptl_ret = gptlpr(gptl_i)
+  end do
+  gptl_ret = gptlfinalize()
+#endif
 
 END PROGRAM DWARF_CLOUDSC

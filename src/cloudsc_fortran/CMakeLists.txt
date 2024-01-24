@@ -26,6 +26,8 @@ if( HAVE_CLOUDSC_FORTRAN )
         DEFINITIONS ${CLOUDSC_DEFINITIONS}
     )
 
+    set_source_files_properties(dwarf_cloudsc.F90 PROPERTIES COMPILE_OPTIONS "-fno-instrument-functions")
+
     # Create symlink for the input data
     if( HAVE_SERIALBOX )
       execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
