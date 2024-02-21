@@ -1,1 +1,1 @@
-../arch/ucar/derecho/intel/2023.0.0/env.sh
+../arch/ucar/derecho/intel/classic/env.sh
