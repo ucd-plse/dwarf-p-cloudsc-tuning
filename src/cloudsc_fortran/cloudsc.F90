@@ -136,6 +136,9 @@ USE YOECLDP  , ONLY : TECLDP
 USE YOEPHLI  , ONLY : TEPHLI
 USE YOMCST   , ONLY : TOMCST
 USE YOETHF   , ONLY : TOETHF
+#ifdef GPTL
+use gptl
+#endif
 IMPLICIT NONE
 
 !-------------------------------------------------------------------------------
@@ -491,7 +494,9 @@ REAL(8) :: ZCOND1, ZQP
 TYPE(TOMCST)      ,INTENT(IN) :: YDCST
 TYPE(TOETHF)      ,INTENT(IN) :: YDTHF
 TYPE(TECLDP)      ,INTENT(IN) :: YDECLDP
-
+#ifdef GPTL
+  integer :: gptl_ret, gptl_handle = 0
+#endif
 #include "abor1.intfb.h"
 
 !DIR$ VFUNCTION EXPHF
@@ -551,7 +556,9 @@ ASSOCIATE( LAERICEAUTO=>YDECLDP%LAERICEAUTO, LAERICESED=>YDECLDP%LAERICESED, &
 !######################################################################
 !             0.  *** SET UP CONSTANTS ***
 !######################################################################
-
+#ifdef GPTL
+    gptl_ret = gptlstart_handle("::cloudsc", gptl_handle)
+#endif
 ZEPSILON=100.*EPSILON(ZEPSILON)
 
 ! ---------------------------------------------------------------------
@@ -2869,4 +2876,7 @@ ENDDO
 !===============================================================================
 END ASSOCIATE
 !IF (LHOOK) CALL DR_HOOK('CLOUDSC',1,ZHOOK_HANDLE)
+#ifdef GPTL
+    gptl_ret = gptlstop_handle("::cloudsc", gptl_handle)
+#endif
 END SUBROUTINE CLOUDSC
